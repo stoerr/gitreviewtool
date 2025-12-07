@@ -125,11 +125,7 @@
           newLineNum++;
         }
 
-        html += `
-          <div class="diff-line diff-${type}">
-            <span class="diff-line-num">${lineNumText}</span>${escapeHtml(line.content)}
-          </div>
-        `;
+        html += `<div class="diff-line diff-${type}"><span class="diff-line-num">${lineNumText}</span><span class="diff-line-content">${escapeHtml(line.content)}</span></div>`;
       });
 
       html += '</div>';
@@ -177,11 +173,7 @@
         classes.push('changed');
       }
 
-      html += `
-        <div class="${classes.join(' ')}">
-          <span class="diff-line-num">${lineNum}</span>${escapeHtml(line)}
-        </div>
-      `;
+      html += `<div class="${classes.join(' ')}"><span class="diff-line-num">${lineNum}</span><span class="diff-line-content">${escapeHtml(line)}</span></div>`;
     });
 
     html += '</div>';

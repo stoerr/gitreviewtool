@@ -103,105 +103,91 @@ html, body {
 #diff-viewer {
   font-family: 'Courier New', monospace;
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.3;
   background-color: #ffffff;
 }
 
 .diff-container {
-  padding: 12px;
+  padding: 0;
 }
 
 .diff-hunk {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .diff-hunk-header {
   background-color: #e7f3ff;
   color: #0d6efd;
-  padding: 4px 8px;
-  border-radius: 4px;
-  margin-bottom: 4px;
+  padding: 2px 8px;
+  margin-bottom: 0;
   font-weight: 600;
+  font-size: 12px;
 }
 
 .diff-line {
-  padding: 2px 4px;
-  white-space: pre-wrap;
-  word-break: break-all;
+  padding: 0 4px;
+  white-space: pre;
+  overflow-x: auto;
+  display: flex;
+  align-items: center;
 }
 
 .diff-line-num {
   display: inline-block;
-  width: 50px;
+  min-width: 45px;
   text-align: right;
-  color: #6c757d;
+  color: rgba(0, 0, 0, 0.4);
   user-select: none;
   padding-right: 8px;
-  border-right: 1px solid #e9ecef;
   margin-right: 8px;
+  flex-shrink: 0;
+  font-size: 11px;
+}
+
+.diff-line-content {
+  flex: 1;
+  white-space: pre;
 }
 
 .diff-add {
-  background-color: #d4f4dd;
-  color: #0f5132;
+  background-color: #d1f4d1;
 }
 
 .diff-remove {
-  background-color: #f8d7da;
-  color: #842029;
+  background-color: #ffdddd;
 }
 
 .diff-context {
   background-color: #ffffff;
-  color: #212529;
 }
 
 .diff-add .diff-line-num {
-  background-color: #bae8c3;
+  color: rgba(0, 128, 0, 0.6);
 }
 
 .diff-remove .diff-line-num {
-  background-color: #f1b9bc;
-}
-
-.diff-line.diff-add::before {
-  content: '+';
-  color: #0f5132;
-  margin-right: 4px;
-  font-weight: bold;
-}
-
-.diff-line.diff-remove::before {
-  content: '-';
-  color: #842029;
-  margin-right: 4px;
-  font-weight: bold;
-}
-
-.diff-line.diff-context::before {
-  content: ' ';
-  margin-right: 4px;
+  color: rgba(200, 0, 0, 0.6);
 }
 
 /* Full file view */
 .full-file-line {
-  padding: 2px 4px;
-  white-space: pre-wrap;
-  word-break: break-all;
+  padding: 0 4px;
+  white-space: pre;
+  overflow-x: auto;
+  display: flex;
+  align-items: center;
 }
 
 .full-file-line.changed {
   background-color: #fff3cd;
-  border-left: 3px solid #ffc107;
 }
 
 .full-file-line.added {
-  background-color: #d4f4dd;
-  border-left: 3px solid #28a745;
+  background-color: #d1f4d1;
 }
 
 .full-file-line.removed-before {
-  border-top: 2px dashed #dc3545;
+  border-top: 2px solid #ffdddd;
 }
 
 /* Loading and error states */
