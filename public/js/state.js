@@ -1,5 +1,5 @@
 /**
- * State management for the Git Ticket Change Viewer
+ * State management for the Git Change Review Helper
  * Simple event-driven state management without frameworks
  */
 

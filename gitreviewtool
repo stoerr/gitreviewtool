@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Git Ticket Change Viewer startup script
+# Git Change Review Helper startup script
 # This script can be symlinked to your PATH for easy access
 
 # Resolve the actual location of this script, following symlinks

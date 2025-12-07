@@ -1,4 +1,4 @@
-# Git Ticket Change Viewer
+# Git Change Review Helper
 
 A lightweight, dependency-free Node.js tool for reviewing changes across multiple commits in a Git repository.
 Nice for reviewing all changes made for a specific ticket.
@@ -9,7 +9,7 @@ Still, I found it very useful. I didn't check the code because I didn't need to 
 
 ## Overview
 
-Git Ticket Change Viewer provides a simple web-based interface to:
+Git Change Review Helper provides a simple web-based interface to:
 - Filter commits by regex patterns (e.g., ticket numbers like `JIRA-1234`)
 - View all files changed across selected commits
 - See consolidated diffs showing only your ticket's changes

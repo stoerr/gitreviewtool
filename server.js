@@ -70,7 +70,7 @@ async function startServer() {
 
   // Start listening
   server.listen(port, '127.0.0.1', () => {
-    console.log(`Git Ticket Change Viewer running at http://localhost:${port}`);
+    console.log(`Git Change Review Helper running at http://localhost:${port}`);
     console.log(`Repository: ${cwd}`);
     console.log('Press Ctrl+C to stop');
   });

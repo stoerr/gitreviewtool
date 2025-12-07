@@ -22,7 +22,7 @@
    * Initialize all components
    */
   function initializeApp() {
-    console.log('Initializing Git Ticket Change Viewer...');
+    console.log('Initializing Git Change Review Helper...');
 
     try {
       // Initialize components

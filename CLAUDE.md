@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Git Ticket Change Viewer** is a lightweight, dependency-free Node.js tool for reviewing changes across multiple commits in a Git repository. It provides a web interface to filter commits by regex patterns (e.g., ticket numbers) and view consolidated diffs showing only the selected commits' changes.
+**Git Change Review Helper** is a lightweight, dependency-free Node.js tool for reviewing changes across multiple commits in a Git repository. It provides a web interface to filter commits by regex patterns (e.g., ticket numbers) and view consolidated diffs showing only the selected commits' changes.
 
 **Key Constraint:** This project uses **zero npm dependencies** - only Node.js built-in modules (`http`, `child_process`, `fs`, `path`, `url`).
 
