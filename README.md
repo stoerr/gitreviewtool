@@ -1,6 +1,11 @@
 # Git Ticket Change Viewer
 
-A lightweight, dependency-free Node.js tool for reviewing changes across multiple commits in a Git repository. Perfect for reviewing all changes made for a specific ticket or feature branch.
+A lightweight, dependency-free Node.js tool for reviewing changes across multiple commits in a Git repository.
+Nice for reviewing all changes made for a specific ticket.
+
+CAUTION: This is vibe-coded in about 3h with Anthropics' Claude. Vibe-coded in the sense of not code-inspected at all, 
+just manually tested and used. Use at your own risk. 
+Still, I found it very useful. I didn't check the code because I didn't need to - it just worked as intended.
 
 ## Overview
 
