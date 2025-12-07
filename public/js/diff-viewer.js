@@ -11,6 +11,8 @@
   const btnMyChanges = document.getElementById('btn-my-changes');
   const btnFullFile = document.getElementById('btn-full-file');
   const wrapLinesCheckbox = document.getElementById('wrap-lines');
+  const btnPrevHunk = document.getElementById('btn-prev-hunk');
+  const btnNextHunk = document.getElementById('btn-next-hunk');
 
   /**
    * Fetch diff data for current file and selected commits
@@ -265,6 +267,64 @@
   }
 
   /**
+   * Navigate to previous hunk
+   */
+  function goToPrevHunk() {
+    const hunks = diffViewerEl.querySelectorAll('.diff-hunk-header');
+    if (hunks.length === 0) return;
+
+    const scrollTop = diffViewerEl.scrollTop;
+    let targetHunk = null;
+
+    // Find the hunk above current scroll position
+    for (let i = hunks.length - 1; i >= 0; i--) {
+      const hunkTop = hunks[i].offsetTop - diffViewerEl.offsetTop;
+      if (hunkTop < scrollTop - 5) { // 5px threshold
+        targetHunk = hunks[i];
+        break;
+      }
+    }
+
+    // If no hunk found above, wrap to last hunk
+    if (!targetHunk && hunks.length > 0) {
+      targetHunk = hunks[hunks.length - 1];
+    }
+
+    if (targetHunk) {
+      targetHunk.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  /**
+   * Navigate to next hunk
+   */
+  function goToNextHunk() {
+    const hunks = diffViewerEl.querySelectorAll('.diff-hunk-header');
+    if (hunks.length === 0) return;
+
+    const scrollTop = diffViewerEl.scrollTop;
+    let targetHunk = null;
+
+    // Find the hunk below current scroll position
+    for (let i = 0; i < hunks.length; i++) {
+      const hunkTop = hunks[i].offsetTop - diffViewerEl.offsetTop;
+      if (hunkTop > scrollTop + 5) { // 5px threshold
+        targetHunk = hunks[i];
+        break;
+      }
+    }
+
+    // If no hunk found below, wrap to first hunk
+    if (!targetHunk && hunks.length > 0) {
+      targetHunk = hunks[0];
+    }
+
+    if (targetHunk) {
+      targetHunk.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  /**
    * Initialize the component
    */
   function init() {
@@ -272,6 +332,19 @@
     btnMyChanges.addEventListener('click', handleModeChange);
     btnFullFile.addEventListener('click', handleModeChange);
     wrapLinesCheckbox.addEventListener('change', handleWrapLinesChange);
+    btnPrevHunk.addEventListener('click', goToPrevHunk);
+    btnNextHunk.addEventListener('click', goToNextHunk);
+
+    // Set up keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.shiftKey && e.key === 'ArrowUp') {
+        e.preventDefault();
+        goToPrevHunk();
+      } else if (e.shiftKey && e.key === 'ArrowDown') {
+        e.preventDefault();
+        goToNextHunk();
+      }
+    });
 
     // Listen to state changes
     AppState.on('file-changed', fetchDiff);

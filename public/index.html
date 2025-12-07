@@ -83,6 +83,22 @@
             <span id="diff-file-name">Diff Viewer</span>
           </h6>
           <div class="d-flex gap-2 align-items-center">
+            <div class="btn-group btn-group-sm" role="group">
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                id="btn-prev-hunk"
+                title="Previous hunk (Shift+Up)">
+                ↑
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                id="btn-next-hunk"
+                title="Next hunk (Shift+Down)">
+                ↓
+              </button>
+            </div>
             <div class="form-check form-check-sm">
               <input
                 type="checkbox"
@@ -188,11 +204,19 @@
               <li>For each file, see exactly what YOUR ticket changed, ignoring unrelated modifications by others</li>
             </ol>
 
+            <h6 class="mt-3">Navigation & Shortcuts:</h6>
+            <ul>
+              <li>Click the <code>↑</code> / <code>↓</code> buttons to jump between diff hunks</li>
+              <li>Use <code>Shift+Up</code> / <code>Shift+Down</code> keyboard shortcuts to navigate hunks</li>
+              <li>Drag the column edges to resize panels to your preference</li>
+              <li>Click the <code>‹</code> button to collapse the commit panel for more diff viewing space</li>
+            </ul>
+
             <h6 class="mt-3">Tips:</h6>
             <ul>
-              <li>Click the <code>‹</code> button to collapse the commit panel for more diff viewing space</li>
               <li>Continuation lines in commit messages are shown with <code>⋯</code></li>
               <li>The tool consolidates multiple changes to the same line, showing only the net effect</li>
+              <li>Long file names in the file list can be scrolled horizontally</li>
             </ul>
           </div>
           <div class="modal-footer">
