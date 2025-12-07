@@ -101,7 +101,8 @@
       return;
     }
 
-    let html = '<div class="diff-container">';
+    const wrapEnabled = wrapLinesCheckbox.checked ? ' wrap-enabled' : '';
+    let html = `<div class="diff-container${wrapEnabled}">`;
 
     data.hunks.forEach(hunk => {
       const commitMessage = hunk.commitMessage || '';
@@ -164,7 +165,8 @@
       });
     }
 
-    let html = '<div class="diff-container">';
+    const wrapEnabled = wrapLinesCheckbox.checked ? ' wrap-enabled' : '';
+    let html = `<div class="diff-container${wrapEnabled}">`;
 
     lines.forEach((line, index) => {
       const lineNum = index + 1;

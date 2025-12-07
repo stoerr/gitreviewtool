@@ -51,11 +51,11 @@ html, body {
 }
 
 .commit-item.has-file-changes {
-  background-color: #fff8e1;
+  background-color: #ffe082;
 }
 
 .commit-item.has-file-changes.selected {
-  background-color: #d4ebf7;
+  background-color: #90caf9;
 }
 
 .commit-item.has-file-changes::before {
@@ -143,6 +143,9 @@ html, body {
 
 .diff-container {
   padding: 0;
+}
+
+.diff-container:not(.wrap-enabled) {
   min-width: max-content;
 }
 
@@ -226,13 +229,15 @@ html, body {
   align-items: stretch;
 }
 
-.diff-line .diff-line-content {
+.diff-line-content {
   white-space: pre;
+  overflow-x: auto;
 }
 
-.diff-line.wrap-lines .diff-line-content {
-  white-space: pre-wrap;
-  word-break: break-word;
+.wrap-lines .diff-line-content {
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+  overflow-x: visible !important;
 }
 
 .diff-line-num {
@@ -277,15 +282,6 @@ html, body {
   padding: 0 4px;
   display: flex;
   align-items: stretch;
-}
-
-.full-file-line .diff-line-content {
-  white-space: pre;
-}
-
-.full-file-line.wrap-lines .diff-line-content {
-  white-space: pre-wrap;
-  word-break: break-word;
 }
 
 .full-file-line.changed {
