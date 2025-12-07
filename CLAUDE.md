@@ -11,21 +11,52 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Running the Server
+
+**Recommended:** Use the `gitreviewtool` script:
 ```bash
 # From any git repository you want to analyze
-node /path/to/gitreviewtool/server.js
+/path/to/gitreviewtool/gitreviewtool
 ```
+
+**Or symlink it to your PATH:**
+```bash
+ln -s /path/to/gitreviewtool/gitreviewtool ~/bin/gitreviewtool
+# Then run from any git repository:
+gitreviewtool
+```
+
+The script follows symlinks to find the actual code, so it works from anywhere.
 
 The server runs on `http://localhost:3032` (auto-adjusts if port is busy).
 
-### Current State
-The repository is in the initial planning phase. As of commit 69225aa, only README.md and configuration files exist. The actual implementation (server.js, HTML interface, frontend code) has not been created yet.
+### Project Structure
+```
+gitreviewtool/
+├── server.js                    # Main HTTP server entry point
+├── gitreviewtool               # Startup script (symlink-friendly)
+├── lib/
+│   ├── utils.js                # Input sanitization and helpers
+│   ├── git.js                  # Git command execution
+│   ├── router.js               # HTTP routing and API endpoints
+│   └── diff-consolidator.js   # Core diff merging algorithm
+├── public/
+│   ├── index.html              # Main SPA interface
+│   ├── css/app.css             # Custom styles
+│   └── js/
+│       ├── state.js            # Event-driven state management
+│       ├── commit-list.js      # Commit list component
+│       ├── file-list.js        # File list component
+│       ├── diff-viewer.js      # Diff viewer component
+│       └── app.js              # Main application controller
+├── README.md
+└── CLAUDE.md
+```
 
 ## Architecture
 
-### Backend (server.js - to be implemented)
+### Backend
 - **Pure Node.js** - no external dependencies allowed
-- Single-file HTTP server using built-in `http` module
+- Modular architecture with `lib/` directory for organization
 - Git operations via `child_process.exec()` and `child_process.spawn()`
 - RESTful JSON API with these endpoints:
   - `GET /api/commits` - All commits with metadata (hash, author, date, message)
@@ -34,10 +65,11 @@ The repository is in the initial planning phase. As of commit 69225aa, only READ
   - `GET /` - Main HTML interface
   - `GET /static/*` - Static assets
 
-### Frontend (to be implemented)
+### Frontend
 - **Vanilla JavaScript** (no frameworks - no React, Vue, etc.)
 - **Bootstrap 5.3** from CDN (only external resource allowed)
-- Single-page application with client-side state management
+- Single-page application with event-driven state management
+- Component-based architecture without a framework
 - Two diff view modes:
   - "My Changes Only" - consolidated view of selected commits
   - "Full File with Marked Changes" - entire file with highlighted changes

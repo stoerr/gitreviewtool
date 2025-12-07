@@ -12,15 +12,38 @@ Git Ticket Change Viewer provides a simple web-based interface to:
 
 Built with zero npm dependencies - just Node.js built-in modules and Bootstrap from CDN.
 
+## Installation
+
+### Quick Setup (Recommended)
+
+Create a symlink to the `gitreviewtool` script in your PATH:
+
+```bash
+# Option 1: Symlink to ~/bin (if it's in your PATH)
+ln -s /path/to/gitreviewtool/gitreviewtool ~/bin/gitreviewtool
+
+# Option 2: Symlink to /usr/local/bin (requires sudo)
+sudo ln -s /path/to/gitreviewtool/gitreviewtool /usr/local/bin/gitreviewtool
+```
+
+The script follows symlinks to find the actual code, so you can install it anywhere and run it from any Git repository.
+
 ## Usage
 
 ### Starting the Server
 
-Navigate to your Git repository and start the server:
+**If you created a symlink (recommended):**
 
 ```bash
 cd /path/to/your/git/repo
-node /path/to/gitreviewtool/server.js
+gitreviewtool
+```
+
+**Without symlink:**
+
+```bash
+cd /path/to/your/git/repo
+/path/to/gitreviewtool/gitreviewtool
 ```
 
 The server will start on `http://localhost:3032` (or another port if 3032 is busy).
