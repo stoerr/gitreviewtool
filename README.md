@@ -17,21 +17,13 @@ Git Change Review Helper provides a simple web-based interface to:
 
 Built with zero npm dependencies - just Node.js built-in modules and Bootstrap from CDN.
 
+![Screenshot](screenshot.png)
+
 ## Installation
 
-### Quick Setup (Recommended)
-
-Create a symlink to the `gitreviewtool` script in your PATH:
-
-```bash
-# Option 1: Symlink to ~/bin (if it's in your PATH)
-ln -s /path/to/gitreviewtool/gitreviewtool ~/bin/gitreviewtool
-
-# Option 2: Symlink to /usr/local/bin (requires sudo)
-sudo ln -s /path/to/gitreviewtool/gitreviewtool /usr/local/bin/gitreviewtool
-```
-
+Clone the repository and create a symlink to the `gitreviewtool` script in your PATH.
 The script follows symlinks to find the actual code, so you can install it anywhere and run it from any Git repository.
+You need node.js in the path.
 
 ## Usage
 

@@ -23,8 +23,15 @@
     }
 
     try {
-      const commitsParam = selectedCommits.join(',');
-      const response = await fetch(`/api/files?commits=${encodeURIComponent(commitsParam)}`);
+      const response = await fetch('/api/files', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          commits: selectedCommits
+        })
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);

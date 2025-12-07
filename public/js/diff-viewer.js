@@ -27,9 +27,16 @@
     try {
       showLoading();
 
-      const commitsParam = selectedCommits.join(',');
-      const fileParam = encodeURIComponent(currentFile);
-      const response = await fetch(`/api/diff?file=${fileParam}&commits=${commitsParam}`);
+      const response = await fetch('/api/diff', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          file: currentFile,
+          commits: selectedCommits
+        })
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
