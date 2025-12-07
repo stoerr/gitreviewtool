@@ -60,10 +60,11 @@ gitreviewtool/
 - Git operations via `child_process.exec()` and `child_process.spawn()`
 - RESTful JSON API with these endpoints:
   - `GET /api/commits` - All commits with metadata (hash, author, date, message)
-  - `GET /api/files?commits=hash1,hash2,...` - Files changed in specified commits
-  - `GET /api/diff?file=path&commits=hash1,hash2,...` - Diff data for a file across commits
+  - `POST /api/files` - Files changed in specified commits (body: `{ commits: [hash1, hash2, ...] }`)
+  - `POST /api/diff` - Diff data for a file across commits (body: `{ file: path, commits: [hash1, hash2, ...] }`)
   - `GET /` - Main HTML interface
   - `GET /static/*` - Static assets
+  - Note: `/api/files` and `/api/diff` also support GET with query params for backwards compatibility, but POST is preferred to avoid URL length limits
 
 ### Frontend
 - **Vanilla JavaScript** (no frameworks - no React, Vue, etc.)
@@ -105,3 +106,4 @@ Target modern browsers with ES6+ support (Chrome/Edge 90+, Firefox 88+, Safari 1
 - **Single-user tool:** Designed for local development use, not production deployment.
 - **No authentication:** Localhost-only, no auth/authorization needed.
 - **Simplicity:** Single-file backend implementation preferred.
+- **Never start the server:** The user always starts the server themselves. Never use `node server.js` or `./gitreviewtool` in Bash commands.
