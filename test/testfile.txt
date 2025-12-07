@@ -1,5 +1,6 @@
 This is a sample text file used for testing purposes.
 It contains multiple lines of text.
-This is the third line.
+Here we insert a first change.
+This is the third line, really.
 And this is the fourth line.
 End of the test file.
