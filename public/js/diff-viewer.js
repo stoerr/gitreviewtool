@@ -104,8 +104,12 @@
     let html = '<div class="diff-container">';
 
     data.hunks.forEach(hunk => {
+      const commitMessage = hunk.commitMessage || '';
+      const infoIcon = commitMessage ? '<span class="info-icon">i</span>' : '';
+      const popup = commitMessage ? `<div class="commit-popup">${escapeHtml(commitMessage)}</div>` : '';
+
       html += '<div class="diff-hunk">';
-      html += `<div class="diff-hunk-header">@@ -${hunk.oldStart},${hunk.oldCount} +${hunk.newStart},${hunk.newCount} @@</div>`;
+      html += `<div class="diff-hunk-header">${infoIcon}<span>@@ -${hunk.oldStart},${hunk.oldCount} +${hunk.newStart},${hunk.newCount} @@</span>${popup}</div>`;
 
       let oldLineNum = hunk.oldStart;
       let newLineNum = hunk.newStart;

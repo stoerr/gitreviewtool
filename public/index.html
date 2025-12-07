@@ -20,19 +20,34 @@
       <div class="col-md-3 border-end panel-container" id="commit-panel">
         <button class="toggle-btn" id="toggle-commits" title="Toggle commits panel">‹</button>
         <div class="panel-header p-2 border-bottom">
-          <h6 class="mb-2">Commits</h6>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="mb-0">Commits</h6>
+            <button id="select-all-commits" class="btn btn-outline-secondary btn-sm" style="font-size: 11px; padding: 2px 8px;">
+              Select All
+            </button>
+          </div>
           <input
             type="text"
             id="filter-input"
             class="form-control form-control-sm mb-2"
             placeholder="Filter by regex (e.g., JIRA-1234)">
-          <div class="form-check form-check-sm">
+          <div class="form-check form-check-sm mb-1">
             <input
               type="checkbox"
               class="form-check-input"
               id="show-filtered-only">
             <label class="form-check-label" for="show-filtered-only">
               Show only filtered commits
+            </label>
+          </div>
+          <div class="form-check form-check-sm">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="multi-select"
+              checked>
+            <label class="form-check-label" for="multi-select">
+              Multi-select
             </label>
           </div>
         </div>

@@ -9,6 +9,8 @@
   const commitListEl = document.getElementById('commit-list');
   const filterInput = document.getElementById('filter-input');
   const showFilteredOnlyCheckbox = document.getElementById('show-filtered-only');
+  const multiSelectCheckbox = document.getElementById('multi-select');
+  const selectAllButton = document.getElementById('select-all-commits');
 
   let debounceTimeout = null;
 
@@ -34,7 +36,7 @@
    */
   function renderCommitList() {
     const state = AppState.getState();
-    const { commits, selectedCommits, filterPattern, showFilteredOnly } = state;
+    const { commits, selectedCommits, filterPattern, showFilteredOnly, commitsWithCurrentFile } = state;
 
     if (!commits || commits.length === 0) {
       commitListEl.innerHTML = '<div class="text-center text-muted p-3">No commits found</div>';
@@ -44,20 +46,30 @@
     // Get filtered commits
     const filteredHashes = filterPattern ? AppState.getFilteredCommits() : [];
     const filteredSet = new Set(filteredHashes);
+    const fileChangesSet = new Set(commitsWithCurrentFile);
 
     let html = '';
 
     commits.forEach(commit => {
       const isSelected = selectedCommits.includes(commit.hash);
       const isFiltered = filteredSet.has(commit.hash);
+      const hasFileChanges = fileChangesSet.has(commit.hash);
       const shouldShow = !showFilteredOnly || isFiltered || filterPattern === '';
 
       const classes = ['commit-item'];
       if (isSelected) classes.push('selected');
       if (isFiltered) classes.push('filtered');
+      if (hasFileChanges) classes.push('has-file-changes');
       if (!shouldShow) classes.push('hidden');
 
       const date = formatDate(commit.timestamp);
+
+      // Extract first line and check if there's more
+      const messageLines = commit.message.split('\n');
+      const firstLine = messageLines[0];
+      const hasMore = messageLines.length > 1 || firstLine.length > 100;
+      const messageClass = hasMore ? 'commit-message has-more' : 'commit-message';
+      const messageTitle = hasMore ? escapeHtml(commit.message) : '';
 
       html += `
         <div class="${classes.join(' ')}" data-hash="${commit.hash}">
@@ -73,7 +85,7 @@
                 <span class="commit-date">${date}</span>
               </div>
               <div class="commit-author">${escapeHtml(commit.author)}</div>
-              <div class="commit-message">${escapeHtml(commit.message)}</div>
+              <div class="${messageClass}" title="${messageTitle}">${escapeHtml(firstLine)}</div>
             </div>
           </div>
         </div>
@@ -88,13 +100,15 @@
    * Attach event listeners to commit items
    */
   function attachEventListeners() {
+    const multiSelect = multiSelectCheckbox.checked;
+
     // Checkbox change events
     const checkboxes = commitListEl.querySelectorAll('.commit-checkbox');
     checkboxes.forEach(checkbox => {
       checkbox.addEventListener('change', (e) => {
         e.stopPropagation();
         const hash = e.target.dataset.hash;
-        AppState.toggleCommit(hash);
+        handleCommitToggle(hash);
       });
     });
 
@@ -108,9 +122,33 @@
         const hash = item.dataset.hash;
         const checkbox = item.querySelector('.commit-checkbox');
         checkbox.checked = !checkbox.checked;
-        AppState.toggleCommit(hash);
+        handleCommitToggle(hash);
       });
     });
+  }
+
+  /**
+   * Handle commit toggle with multi-select support
+   */
+  function handleCommitToggle(hash) {
+    const multiSelect = multiSelectCheckbox.checked;
+
+    if (multiSelect) {
+      // Multi-select mode: toggle this commit
+      AppState.toggleCommit(hash);
+    } else {
+      // Single-select mode: select only this commit
+      const state = AppState.getState();
+      const isCurrentlySelected = state.selectedCommits.includes(hash);
+
+      if (isCurrentlySelected && state.selectedCommits.length === 1) {
+        // If clicking the only selected commit, deselect it
+        AppState.clearSelectedCommits();
+      } else {
+        // Select only this commit
+        AppState.setSelectedCommits([hash]);
+      }
+    }
   }
 
   /**
@@ -189,18 +227,84 @@
   }
 
   /**
+   * Handle select all button
+   */
+  function handleSelectAll() {
+    const state = AppState.getState();
+    const { commits, selectedCommits, filterPattern, showFilteredOnly } = state;
+
+    // Determine which commits to select
+    let commitsToSelect;
+
+    if (filterPattern && showFilteredOnly) {
+      // If filtering and showing only filtered, select filtered commits
+      commitsToSelect = AppState.getFilteredCommits();
+    } else if (filterPattern) {
+      // If filtering but showing all, select filtered commits
+      commitsToSelect = AppState.getFilteredCommits();
+    } else {
+      // No filter, select all commits
+      commitsToSelect = commits.map(c => c.hash);
+    }
+
+    // Check if all target commits are already selected
+    const allSelected = commitsToSelect.every(hash => selectedCommits.includes(hash));
+
+    if (allSelected) {
+      // Deselect all
+      AppState.clearSelectedCommits();
+      selectAllButton.textContent = 'Select All';
+    } else {
+      // Select all
+      AppState.setSelectedCommits(commitsToSelect);
+      selectAllButton.textContent = 'Deselect All';
+    }
+  }
+
+  /**
+   * Update select all button text
+   */
+  function updateSelectAllButton() {
+    const state = AppState.getState();
+    const { commits, selectedCommits, filterPattern } = state;
+
+    let targetCommits;
+    if (filterPattern) {
+      targetCommits = AppState.getFilteredCommits();
+    } else {
+      targetCommits = commits.map(c => c.hash);
+    }
+
+    const allSelected = targetCommits.length > 0 &&
+                       targetCommits.every(hash => selectedCommits.includes(hash));
+
+    selectAllButton.textContent = allSelected ? 'Deselect All' : 'Select All';
+  }
+
+  /**
    * Initialize the component
    */
   function init() {
     // Set up input listeners
     filterInput.addEventListener('input', handleFilterInput);
     showFilteredOnlyCheckbox.addEventListener('change', handleShowFilteredOnly);
+    selectAllButton.addEventListener('click', handleSelectAll);
 
     // Listen to state changes
-    AppState.on('commits-loaded', renderCommitList);
-    AppState.on('filter-changed', renderCommitList);
+    AppState.on('commits-loaded', () => {
+      renderCommitList();
+      updateSelectAllButton();
+    });
+    AppState.on('filter-changed', () => {
+      renderCommitList();
+      updateSelectAllButton();
+    });
     AppState.on('show-filtered-changed', renderCommitList);
-    AppState.on('selection-changed', renderCommitList);
+    AppState.on('selection-changed', () => {
+      renderCommitList();
+      updateSelectAllButton();
+    });
+    AppState.on('diff-data-changed', renderCommitList);
 
     // Fetch commits
     fetchCommits();

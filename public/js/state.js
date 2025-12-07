@@ -15,7 +15,8 @@
     files: [],                // Files changed in selected commits
     currentFile: null,        // Currently viewed file
     diffMode: 'my-changes',   // 'my-changes' | 'full-file'
-    diffData: null            // Current diff data
+    diffData: null,           // Current diff data
+    commitsWithCurrentFile: new Set() // Commits that change the current file
   };
 
   // Event listeners
@@ -144,6 +145,18 @@
    */
   function setDiffData(data) {
     state.diffData = data;
+
+    // Extract commits that have changes in this file
+    const commitsWithChanges = new Set();
+    if (data && data.myChangesOnly && data.myChangesOnly.hunks) {
+      data.myChangesOnly.hunks.forEach(hunk => {
+        if (hunk.commitHash) {
+          commitsWithChanges.add(hunk.commitHash);
+        }
+      });
+    }
+    state.commitsWithCurrentFile = commitsWithChanges;
+
     emit('diff-data-changed', data);
   }
 
@@ -159,7 +172,8 @@
       files: state.files,
       currentFile: state.currentFile,
       diffMode: state.diffMode,
-      diffData: state.diffData
+      diffData: state.diffData,
+      commitsWithCurrentFile: Array.from(state.commitsWithCurrentFile)
     };
   }
 
