@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Git Ticket Change Viewer startup script
+# This script can be symlinked to your PATH for easy access
+
+# Resolve the actual location of this script, following symlinks
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+# Start the server from the repository directory
+node "$SCRIPT_DIR/server.js"

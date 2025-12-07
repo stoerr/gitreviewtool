@@ -1,0 +1,268 @@
+/* Layout */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+}
+
+.main-content {
+  height: calc(100vh - 60px);
+}
+
+.panel-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+}
+
+.panel-header {
+  flex-shrink: 0;
+  background-color: #f8f9fa;
+}
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+/* Commit list */
+.commit-item {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e9ecef;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  font-size: 13px;
+}
+
+.commit-item:hover {
+  background-color: #f8f9fa;
+}
+
+.commit-item.selected {
+  background-color: #e7f3ff;
+}
+
+.commit-item.filtered {
+  border-left: 3px solid #0d6efd;
+}
+
+.commit-item.hidden {
+  display: none;
+}
+
+.commit-hash {
+  font-family: 'Courier New', monospace;
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.commit-author {
+  color: #495057;
+  font-size: 12px;
+}
+
+.commit-date {
+  color: #6c757d;
+  font-size: 11px;
+}
+
+.commit-message {
+  color: #212529;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.commit-checkbox {
+  margin-right: 8px;
+}
+
+/* File list */
+.file-item {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e9ecef;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  transition: background-color 0.15s;
+}
+
+.file-item:hover {
+  background-color: #f8f9fa;
+}
+
+.file-item.active {
+  background-color: #0d6efd;
+  color: white;
+}
+
+/* Diff viewer */
+#diff-viewer {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  background-color: #ffffff;
+}
+
+.diff-container {
+  padding: 12px;
+}
+
+.diff-hunk {
+  margin-bottom: 16px;
+}
+
+.diff-hunk-header {
+  background-color: #e7f3ff;
+  color: #0d6efd;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.diff-line {
+  padding: 2px 4px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.diff-line-num {
+  display: inline-block;
+  width: 50px;
+  text-align: right;
+  color: #6c757d;
+  user-select: none;
+  padding-right: 8px;
+  border-right: 1px solid #e9ecef;
+  margin-right: 8px;
+}
+
+.diff-add {
+  background-color: #d4f4dd;
+  color: #0f5132;
+}
+
+.diff-remove {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+.diff-context {
+  background-color: #ffffff;
+  color: #212529;
+}
+
+.diff-add .diff-line-num {
+  background-color: #bae8c3;
+}
+
+.diff-remove .diff-line-num {
+  background-color: #f1b9bc;
+}
+
+.diff-line.diff-add::before {
+  content: '+';
+  color: #0f5132;
+  margin-right: 4px;
+  font-weight: bold;
+}
+
+.diff-line.diff-remove::before {
+  content: '-';
+  color: #842029;
+  margin-right: 4px;
+  font-weight: bold;
+}
+
+.diff-line.diff-context::before {
+  content: ' ';
+  margin-right: 4px;
+}
+
+/* Full file view */
+.full-file-line {
+  padding: 2px 4px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.full-file-line.changed {
+  background-color: #fff3cd;
+  border-left: 3px solid #ffc107;
+}
+
+.full-file-line.added {
+  background-color: #d4f4dd;
+  border-left: 3px solid #28a745;
+}
+
+.full-file-line.removed-before {
+  border-top: 2px dashed #dc3545;
+}
+
+/* Loading and error states */
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #842029;
+  padding: 12px;
+  margin: 12px;
+  border-radius: 4px;
+  border: 1px solid #f5c2c7;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+}
+
+/* Button group */
+.btn-group-sm .btn {
+  font-size: 12px;
+  padding: 4px 12px;
+}
+
+.btn-group .btn.active {
+  background-color: #0d6efd;
+  color: white;
+  border-color: #0d6efd;
+}
+
+/* Scrollbar styling */
+.panel-body::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.panel-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.panel-body::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.panel-body::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Utility classes */
+.text-mono {
+  font-family: 'Courier New', monospace;
+}
+
+.text-muted-small {
+  color: #6c757d;
+  font-size: 12px;
+}
