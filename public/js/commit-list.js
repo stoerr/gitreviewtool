@@ -65,14 +65,14 @@
       const date = formatDate(commit.timestamp);
 
       // Extract first line and check if there's more
-      const messageLines = commit.message.split('\n');
-      const firstLine = messageLines[0];
-      const hasMore = messageLines.length > 1 || firstLine.length > 100;
+      const messageLines = commit.message.split('\n').filter(l => l.trim());
+      const firstLine = messageLines[0] || '';
+      const hasMore = messageLines.length > 1;
       const messageClass = hasMore ? 'commit-message has-more' : 'commit-message';
-      const messageTitle = hasMore ? escapeHtml(commit.message) : '';
+      const fullMessage = escapeHtml(commit.message);
 
       html += `
-        <div class="${classes.join(' ')}" data-hash="${commit.hash}">
+        <div class="${classes.join(' ')}" data-hash="${commit.hash}" title="${fullMessage}">
           <div class="d-flex align-items-start">
             <input
               type="checkbox"
@@ -80,12 +80,12 @@
               data-hash="${commit.hash}"
               ${isSelected ? 'checked' : ''}>
             <div class="flex-grow-1">
-              <div class="d-flex justify-content-between align-items-start">
+              <div class="commit-header">
                 <span class="commit-hash">${commit.shortHash}</span>
+                <span class="commit-author">${escapeHtml(commit.author)}</span>
                 <span class="commit-date">${date}</span>
               </div>
-              <div class="commit-author">${escapeHtml(commit.author)}</div>
-              <div class="${messageClass}" title="${messageTitle}">${escapeHtml(firstLine)}</div>
+              <div class="${messageClass}">${escapeHtml(firstLine)}</div>
             </div>
           </div>
         </div>
