@@ -33,6 +33,9 @@
       // Set initial diff mode
       AppState.setDiffMode('my-changes');
 
+      // Set up commit panel toggle
+      setupCommitPanelToggle();
+
       console.log('Application initialized successfully');
     } catch (error) {
       console.error('Error initializing application:', error);
@@ -42,6 +45,23 @@
     // Set up global error handler
     window.addEventListener('error', handleGlobalError);
     window.addEventListener('unhandledrejection', handleUnhandledRejection);
+  }
+
+  /**
+   * Set up commit panel toggle functionality
+   */
+  function setupCommitPanelToggle() {
+    const commitPanel = document.getElementById('commit-panel');
+    const toggleBtn = document.getElementById('toggle-commits');
+
+    if (!commitPanel || !toggleBtn) {
+      return;
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      commitPanel.classList.toggle('collapsed');
+      toggleBtn.textContent = commitPanel.classList.contains('collapsed') ? '›' : '‹';
+    });
   }
 
   /**

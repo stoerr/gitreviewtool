@@ -105,10 +105,12 @@ html, body {
   font-size: 13px;
   line-height: 1.3;
   background-color: #ffffff;
+  overflow-x: auto;
 }
 
 .diff-container {
   padding: 0;
+  min-width: max-content;
 }
 
 .diff-hunk {
@@ -127,9 +129,13 @@ html, body {
 .diff-line {
   padding: 0 4px;
   white-space: pre;
-  overflow-x: auto;
   display: flex;
-  align-items: center;
+  align-items: stretch;
+}
+
+.diff-line.wrap-lines .diff-line-content {
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 
 .diff-line-num {
@@ -173,9 +179,13 @@ html, body {
 .full-file-line {
   padding: 0 4px;
   white-space: pre;
-  overflow-x: auto;
   display: flex;
-  align-items: center;
+  align-items: stretch;
+}
+
+.full-file-line.wrap-lines .diff-line-content {
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 
 .full-file-line.changed {
@@ -188,6 +198,52 @@ html, body {
 
 .full-file-line.removed-before {
   border-top: 2px solid #ffdddd;
+}
+
+/* Collapsible commit panel */
+#commit-panel {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+#commit-panel.collapsed {
+  flex: 0 0 auto !important;
+  max-width: 30px !important;
+  min-width: 30px !important;
+}
+
+#commit-panel.collapsed .panel-header,
+#commit-panel.collapsed .panel-body {
+  display: none;
+}
+
+#commit-panel .toggle-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 16px;
+  color: #495057;
+  line-height: 1;
+  transition: all 0.2s;
+}
+
+#commit-panel .toggle-btn:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+}
+
+#commit-panel.collapsed .toggle-btn {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  right: auto;
+  font-size: 18px;
 }
 
 /* Loading and error states */

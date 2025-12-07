@@ -17,7 +17,8 @@
 
     <div class="row main-content">
       <!-- Left panel: Commits -->
-      <div class="col-md-3 border-end panel-container">
+      <div class="col-md-3 border-end panel-container" id="commit-panel">
+        <button class="toggle-btn" id="toggle-commits" title="Toggle commits panel">‹</button>
         <div class="panel-header p-2 border-bottom">
           <h6 class="mb-2">Commits</h6>
           <input
@@ -59,21 +60,32 @@
           <h6 class="mb-0">
             <span id="diff-file-name">Diff Viewer</span>
           </h6>
-          <div class="btn-group btn-group-sm" role="group">
-            <button
-              type="button"
-              class="btn btn-outline-primary"
-              id="btn-my-changes"
-              data-mode="my-changes">
-              My Changes Only
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-primary"
-              id="btn-full-file"
-              data-mode="full-file">
-              Full File
-            </button>
+          <div class="d-flex gap-2 align-items-center">
+            <div class="form-check form-check-sm">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="wrap-lines">
+              <label class="form-check-label" for="wrap-lines" style="font-size: 12px;">
+                Wrap Lines
+              </label>
+            </div>
+            <div class="btn-group btn-group-sm" role="group">
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                id="btn-my-changes"
+                data-mode="my-changes">
+                My Changes Only
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                id="btn-full-file"
+                data-mode="full-file">
+                Full File
+              </button>
+            </div>
           </div>
         </div>
         <div id="diff-viewer" class="panel-body overflow-auto">

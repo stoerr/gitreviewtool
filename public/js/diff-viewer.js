@@ -10,6 +10,7 @@
   const diffFileNameEl = document.getElementById('diff-file-name');
   const btnMyChanges = document.getElementById('btn-my-changes');
   const btnFullFile = document.getElementById('btn-full-file');
+  const wrapLinesCheckbox = document.getElementById('wrap-lines');
 
   /**
    * Fetch diff data for current file and selected commits
@@ -125,7 +126,8 @@
           newLineNum++;
         }
 
-        html += `<div class="diff-line diff-${type}"><span class="diff-line-num">${lineNumText}</span><span class="diff-line-content">${escapeHtml(line.content)}</span></div>`;
+        const wrapClass = wrapLinesCheckbox.checked ? ' wrap-lines' : '';
+        html += `<div class="diff-line diff-${type}${wrapClass}"><span class="diff-line-num">${lineNumText}</span><span class="diff-line-content">${escapeHtml(line.content)}</span></div>`;
       });
 
       html += '</div>';
@@ -171,6 +173,10 @@
         classes.push('removed-before');
       } else if (changeType) {
         classes.push('changed');
+      }
+
+      if (wrapLinesCheckbox.checked) {
+        classes.push('wrap-lines');
       }
 
       html += `<div class="${classes.join(' ')}"><span class="diff-line-num">${lineNum}</span><span class="diff-line-content">${escapeHtml(line)}</span></div>`;
@@ -239,12 +245,20 @@
   }
 
   /**
+   * Handle wrap lines toggle
+   */
+  function handleWrapLinesChange() {
+    renderDiff();
+  }
+
+  /**
    * Initialize the component
    */
   function init() {
     // Set up button listeners
     btnMyChanges.addEventListener('click', handleModeChange);
     btnFullFile.addEventListener('click', handleModeChange);
+    wrapLinesCheckbox.addEventListener('change', handleWrapLinesChange);
 
     // Listen to state changes
     AppState.on('file-changed', fetchDiff);
