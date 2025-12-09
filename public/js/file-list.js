@@ -12,6 +12,7 @@
   /**
    * Fetch files changed in selected commits
    */
+  let latestFilesRequestId = 0;
   async function fetchFiles() {
     const state = AppState.getState();
     const { selectedCommits } = state;
@@ -21,6 +22,8 @@
       AppState.setCurrentFile(null);
       return;
     }
+
+    const requestId = ++latestFilesRequestId;
 
     try {
       const response = await fetch('/api/files', {
@@ -33,15 +36,23 @@
         })
       });
 
+      // If a newer request was started, ignore this response
+      if (requestId !== latestFilesRequestId) return;
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const files = await response.json();
+
+      // If a newer request was started while parsing JSON, ignore
+      if (requestId !== latestFilesRequestId) return;
+
       AppState.setFiles(files);
 
       // If current file is not in the new list, clear it
-      if (state.currentFile && !files.includes(state.currentFile)) {
+      const currentState = AppState.getState();
+      if (currentState.currentFile && !files.includes(currentState.currentFile)) {
         AppState.setCurrentFile(null);
       }
     } catch (error) {

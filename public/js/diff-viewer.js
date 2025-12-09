@@ -17,6 +17,7 @@
   /**
    * Fetch diff data for current file and selected commits
    */
+  let latestDiffRequestId = 0;
   async function fetchDiff() {
     const state = AppState.getState();
     const { currentFile, selectedCommits } = state;
@@ -25,6 +26,8 @@
       AppState.setDiffData(null);
       return;
     }
+
+    const requestId = ++latestDiffRequestId;
 
     try {
       showLoading();
@@ -40,11 +43,18 @@
         })
       });
 
+      // If a newer request was started, ignore this response
+      if (requestId !== latestDiffRequestId) return;
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const diffData = await response.json();
+
+      // If a newer request was started while parsing JSON, ignore
+      if (requestId !== latestDiffRequestId) return;
+
       AppState.setDiffData(diffData);
     } catch (error) {
       console.error('Error fetching diff:', error);

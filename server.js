@@ -4,6 +4,7 @@ const http = require('http');
 const path = require('path');
 const git = require('./lib/git');
 const { handleRequest } = require('./lib/router');
+const child_process = require('child_process');
 
 const DEFAULT_PORT = 3032;
 const MAX_PORT_ATTEMPTS = 10;
@@ -54,10 +55,33 @@ async function startServer() {
     process.exit(1);
   }
 
-  // Find an available port
+  // Parse CLI args for port
+  const argv = process.argv.slice(2);
+  let requestedPort = undefined;
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === '-p' || a === '--port') {
+      const val = argv[i + 1];
+      if (!val) {
+        console.error('Error: --port requires a value');
+        process.exit(1);
+      }
+      const parsed = parseInt(val, 10);
+      if (Number.isNaN(parsed) || parsed <= 0 || parsed > 65535) {
+        console.error('Error: Invalid port number. Must be an integer between 1 and 65535');
+        process.exit(1);
+      }
+      requestedPort = parsed;
+      i++; // skip value
+    }
+  }
+
+  // Find an available port starting from requested or default
+  const startPort = requestedPort || DEFAULT_PORT;
+
   let port;
   try {
-    port = await findAvailablePort(DEFAULT_PORT);
+    port = await findAvailablePort(startPort);
   } catch (error) {
     console.error(`Error: ${error.message}`);
     process.exit(1);
@@ -70,9 +94,27 @@ async function startServer() {
 
   // Start listening
   server.listen(port, '127.0.0.1', () => {
-    console.log(`Git Change Review Helper running at http://localhost:${port}`);
+    const url = `http://localhost:${port}`;
+    console.log(`Git Change Review Helper running at ${url}`);
     console.log(`Repository: ${cwd}`);
     console.log('Press Ctrl+C to stop');
+
+    // If the system 'open' command exists, try to open the page in the default browser
+    try {
+      const which = child_process.spawnSync('which', ['open']);
+      if (which.status === 0 && which.stdout && which.stdout.toString().trim()) {
+        // spawn detached so it doesn't block the main process
+        try {
+          child_process.spawn('open', [url], { stdio: 'ignore', detached: true }).unref();
+          console.log('Opened browser with system "open" command');
+        } catch (err) {
+          // Non-fatal: just report
+          console.error('Could not open browser automatically:', err && err.message ? err.message : err);
+        }
+      }
+    } catch (err) {
+      // ignore any errors when checking for 'open'
+    }
   });
 
   // Graceful shutdown

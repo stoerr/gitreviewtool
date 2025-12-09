@@ -100,8 +100,6 @@
    * Attach event listeners to commit items
    */
   function attachEventListeners() {
-    const multiSelect = multiSelectCheckbox.checked;
-
     // Checkbox change events
     const checkboxes = commitListEl.querySelectorAll('.commit-checkbox');
     checkboxes.forEach(checkbox => {
@@ -211,10 +209,34 @@
       const pattern = filterInput.value.trim();
       AppState.setFilterPattern(pattern);
 
-      // Auto-select filtered commits if filter is applied
+      // Only proceed with auto-enable/selection when the pattern is non-empty
+      // and is a valid regular expression. This prevents toggling UI state
+      // for user typos like unmatched parentheses.
       if (pattern) {
-        const filteredCommits = AppState.getFilteredCommits();
-        AppState.setSelectedCommits(filteredCommits);
+        let regexValid = true;
+        try {
+          // Attempt to construct the regex in a case-insensitive manner
+          new RegExp(pattern, 'i');
+        } catch (err) {
+          regexValid = false;
+        }
+
+        if (regexValid) {
+          // Update the checkboxes' visual state
+          showFilteredOnlyCheckbox.checked = true;
+          multiSelectCheckbox.checked = true;
+
+          // Update AppState for showing filtered only
+          AppState.setShowFilteredOnly(true);
+
+          // Select exactly the filtered commits (deselect others)
+          const filteredCommits = AppState.getFilteredCommits();
+          AppState.setSelectedCommits(filteredCommits);
+        } else {
+          // Invalid regex: don't change checkboxes or selection. Let the
+          // AppState.getFilteredCommits() handle this case (it will return []).
+          // Optionally we could provide UI feedback here in the future.
+        }
       }
     }, 300);
   }
